@@ -1,124 +1,214 @@
-# CardioIA - Diagnóstico Automatizado <!-- omit in toc -->
+# CardioIA – Fase 2: Diagnóstico Automatizado – IA no Estetoscópio Digital
 
-> Este projeto faz parte do curso de **Inteligência Artificial** da [FIAP](https://github.com/fiap) - Online 2024.  
-> Este repositório corresponde à atividade "**Ano 2 - Fase 2** - Diagnóstico Automatizado".
+## Resumo
+Este repositório contém a implementação da **Fase 2 – Diagnóstico Automatizado** do projeto **CardioIA (FIAP)**.  
+O objetivo é simular um módulo de apoio ao diagnóstico em cardiologia usando **processamento de linguagem natural (NLP)** e **aprendizado de máquina (ML)** aplicado a relatos de sintomas e classificação de risco.
 
-## Índice <!-- omit in toc -->
+---
 
-- [Visão Geral do Projeto](#visão-geral-do-projeto)
-- [Objetivos do Projeto](#objetivos-do-projeto)
-  - [**Objetivo Geral:**](#objetivo-geral)
-  - [**Objetivos Específicos:**](#objetivos-específicos)
-  - [**Resultados Esperados:**](#resultados-esperados)
-- [Parte 1 - Diagnóstico com Regressão Logística](#parte-1---diagnóstico-com-regressão-logística)
-  - [Implementação](#implementação)
-  - [Resultados Obtidos](#resultados-obtidos)
-- [Parte 2 - Diagnóstico com Redes Neurais](#parte-2---diagnóstico-com-redes-neurais)
-  - [Arquitetura da Rede](#arquitetura-da-rede)
-  - [Treinamento e Validação](#treinamento-e-validação)
-  - [Métricas de Avaliação](#métricas-de-avaliação)
-- [Ir Além (Opcionais)](#ir-além-opcionais)
+## Índice
+- [Visão Geral](#visão-geral)
+- [Objetivos](#objetivos)
+- [Parte 1 — Extração de Sintomas e Sugestão de Diagnóstico](#parte-1--extração-de-sintomas-e-sugestão-de-diagnóstico)
+- [Parte 2 — Classificador de Risco (TF-IDF + ML)](#parte-2--classificador-de-risco-tf-idf--ml)
+- [Entregáveis e Estrutura do Repositório](#entregáveis-e-estrutura-do-repositório)
+- [Como Executar (passo a passo)](#como-executar-passo-a-passo)
+- [Dependências](#dependências)
+- [Métricas de Avaliação e Observações Técnicas](#métricas-de-avaliação-e-observações-técnicas)
+- [Rastreabilidade e Licenças](#rastreabilidade-e-licenças)
 - [Equipe](#equipe)
-  - [Membros](#membros)
-  - [Professores](#professores)
+- [Checklist de Entrega](#checklist-de-entrega)
+- [Links Úteis / Referências](#links-úteis--referências)
 
 ---
 
-## Visão Geral do Projeto
+## Visão Geral
+A Fase 2 foca em duas tarefas obrigatórias:
 
-O **CardioIA** é um projeto acadêmico inovador do curso de Inteligência Artificial da FIAP.  
-Na **Fase 2 – Diagnóstico Automatizado**, o foco está no desenvolvimento de modelos supervisionados para predição de risco cardiovascular a partir de dados clínicos.
+1. **Parte 1** — Gerar 10 frases simuladas de pacientes, extrair sintomas via `mapa_conhecimento.csv` e sugerir diagnóstico por correspondência de padrões (string matching + regras simples).
+2. **Parte 2** — Treinar um classificador de texto (TF-IDF → ML) que rotule frases em **alto risco** / **baixo risco**.
 
-Nesta fase, passamos da etapa de **coleta e governança de dados (Fase 1)** para a **construção de algoritmos de Machine Learning**, aplicando regressão logística e redes neurais artificiais (RNA) ao dataset de doenças cardíacas.
-
----
-
-## Objetivos do Projeto
-
-### **Objetivo Geral:**
-Implementar modelos supervisionados capazes de diagnosticar a probabilidade de doença cardíaca a partir de dados clínicos estruturados.
-
-### **Objetivos Específicos:**
-
-1. Aplicar **Regressão Logística** para estimar probabilidades de risco.
-2. Construir e treinar uma **Rede Neural Artificial** para classificação binária (doença / sem doença).
-3. Comparar as métricas de desempenho entre os dois modelos.
-4. Explorar melhorias opcionais, como tuning de hiperparâmetros ou outras arquiteturas.
-
-### **Resultados Esperados:**
-- Relatório comparativo de desempenho entre regressão logística e RNA.
-- Visualizações das métricas de avaliação (curva ROC, matriz de confusão, acurácia, precisão, recall, F1).
-- Base inicial de modelos inteligentes aplicáveis à triagem automatizada em cardiologia.
+O objetivo prático é apresentar um **pipeline mínimo, reprodutível e documentado** para demonstrar conceitos de NLP, classificação e governança de dados aplicada ao domínio de saúde.
 
 ---
 
-## Parte 1 - Diagnóstico com Regressão Logística
+## Objetivos
 
-### Implementação
-- Dataset: Cleveland Heart Disease (mesmo utilizado na Fase 1).  
-- Pré-processamento: normalização dos dados e divisão em treino/teste (80/20).  
-- Modelo: `LogisticRegression` (biblioteca **scikit-learn**).  
+**Geral**  
+Implementar e demonstrar um sistema de apoio à triagem clínica baseado em NLP e ML, enfatizando clareza, rastreabilidade e responsabilidade de dados.
 
-### Resultados Obtidos
-- **Acurácia:** XX%  
-- **Precisão:** XX%  
-- **Recall:** XX%  
-- **F1-score:** XX%  
-- **Curva ROC-AUC:** XX  
-
-*(Substituir pelos resultados reais após execução do notebook.)*
+**Específicos**
+- Extrair sintomas a partir de frases em linguagem natural.  
+- Associar sintomas a possíveis diagnósticos via mapa de conhecimento.  
+- Treinar e avaliar um classificador de risco simples usando TF-IDF e Scikit-learn.  
+- Documentar e entregar repositório público com código, dados e vídeo demonstrativo.  
 
 ---
 
-## Parte 2 - Diagnóstico com Redes Neurais
+## Parte 1 — Extração de Sintomas e Sugestão de Diagnóstico
 
-### Arquitetura da Rede
-- Framework: **TensorFlow / Keras**  
-- Estrutura:  
-  - Camada de entrada: 13 variáveis clínicas  
-  - 2 camadas ocultas (ativação ReLU)  
-  - Camada de saída (sigmoide) para classificação binária  
+**Arquivos principais**
+- `frases.txt` — 10 frases simuladas (uma frase por linha).  
+- `mapa_conhecimento.csv` — mapa de conhecimento com colunas: `sintoma_1, sintoma_2, doenca_associada`.  
+- `diagnostico.ipynb` / `diagnostico.py` — script/notebook que:
+  - Lê `frases.txt`.  
+  - Carrega `mapa_conhecimento.csv`.  
+  - Normaliza o texto (minúsculas, remoção de pontuação básica).  
+  - Faz pattern matching (frases → sintomas) e sugere diagnóstico.  
+  - Gera `resultados_parte1.csv` com colunas: `frase, sintomas_encontrados, diagnostico_sugerido, confiança_basica`.
 
-### Treinamento e Validação
-- Épocas: XX  
-- Batch size: XX  
-- Função de perda: `binary_crossentropy`  
-- Otimizador: `adam`  
-- Métricas monitoradas: `accuracy`  
-
-### Métricas de Avaliação
-- **Acurácia:** XX%  
-- **Precisão:** XX%  
-- **Recall:** XX%  
-- **F1-score:** XX%  
-- **Curva ROC-AUC:** XX  
-
-*(Substituir pelos valores reais obtidos após treinamento.)*
+**Abordagem técnica**
+- Tokenização simples + busca por bigramas/trigramas do mapa.  
+- Regras heurísticas para conflitos (múltiplas doenças → escolher com maior número de sintomas coincidentes).  
+- Notebook contém exemplos e comentários sobre limitações e vieses.  
 
 ---
 
-## Ir Além (Opcionais)
+## Parte 2 — Classificador de Risco (TF-IDF + ML)
 
-Além do mínimo esperado, este projeto explorou/descreve (caso realizado):  
+**Arquivos principais**
+- `base_risco.csv` — dataset sintético no formato: `frase, situacao (alto risco/baixo risco)` (~40–120 exemplos).  
+- `classificador.ipynb` — notebook com:
+  - Pré-processamento (limpeza, stopwords pt-BR, lematização opcional).  
+  - Vetorização TF-IDF.  
+  - Treinamento de **LogisticRegression** e **DecisionTreeClassifier** (comparação).  
+  - Validação: `train_test_split` + métricas de avaliação.  
+  - Salvamento do modelo e vetor (`joblib`).  
 
-- 🔹 Tuning de hiperparâmetros (GridSearch / RandomSearch).  
-- 🔹 Teste de arquiteturas alternativas (mais camadas ou dropout).  
-- 🔹 Uso de métricas avançadas de validação cruzada.  
-
----
-
-## Equipe
-
-### Membros
-
-- Gustavo Castro (RM560831)  
-- Luis Emidio (RM559976)
-  
-### Professores
-
-- **Tutor**: [Leonardo Ruiz Orabona](https://www.linkedin.com/in/leonardoorabona/)  
-- **Coordenador**: [André Godoi](https://www.linkedin.com/in/profandregodoi/)  
+**Abordagem técnica**
+- Pipeline do Scikit-learn para encadear TF-IDF + classificador.  
+- Validação: **k-fold cross-validation (k=5)**.  
+- Discussão sobre viés e limitações do dataset sintético.  
 
 ---
 
-[LICENSE.md](LICENSE.md)
+## Entregáveis e Estrutura do Repositório
+/fase2-cardioia
+│── frases.txt
+│── mapa_conhecimento.csv
+│── diagnostico.ipynb
+│── resultados_parte1.csv
+│── base_risco.csv
+│── classificador.ipynb
+│── modelos/
+│ └── tfidf_vectorizer.joblib
+│ └── classifier.joblib
+│── requirements.txt
+│── README.md
+│── .gitignore
+│── video_demo_link.txt (link YouTube não listado)
+
+yaml
+Copy code
+
+---
+
+## Como Executar (passo a passo)
+
+1. **Clonar repositório**
+   ```bash
+   git clone https://github.com/SEU_USUARIO/fase2-cardioia.git
+   cd fase2-cardioia
+Criar ambiente virtual
+
+bash
+Copy code
+python -m venv .venv
+source .venv/bin/activate   # macOS/Linux
+.venv\Scripts\activate      # Windows
+Instalar dependências
+
+bash
+Copy code
+pip install -r requirements.txt
+Parte 1 — Executar diagnóstico
+
+Notebook: abrir diagnostico.ipynb e rodar.
+
+Script (se existir diagnostico.py):
+
+bash
+Copy code
+python diagnostico.py --input frases.txt --mapa mapa_conhecimento.csv --output resultados_parte1.csv
+Parte 2 — Treinar classificador
+
+Abrir classificador.ipynb no Jupyter e executar.
+
+Modelos são salvos em /modelos e relatórios gerados no notebook.
+
+Dependências
+Arquivo requirements.txt sugerido:
+
+shell
+Copy code
+numpy>=1.21
+pandas>=1.3
+scikit-learn>=1.0
+joblib>=1.2
+jupyterlab
+nltk>=3.6
+unidecode>=1.3
+Para usar lematização em PT-BR: instalar spacy + pt_core_news_sm.
+
+Métricas de Avaliação e Observações Técnicas
+Métricas usadas
+
+Accuracy
+
+Precision
+
+Recall
+
+F1-score (macro e micro)
+
+Matriz de confusão
+
+(Opcional) Curva ROC e AUC
+
+Boas práticas
+
+Documentar limitações (dados sintéticos, amostra pequena).
+
+Indicar vieses e recomendações (necessidade de validação clínica).
+
+Sistema não deve ser usado para diagnóstico real — apenas simulação educacional.
+
+Rastreabilidade e Licenças
+Todos os dados são sintéticos e gerados pela equipe.
+
+Caso sejam usados materiais externos, incluir fonte e licença no README.
+
+Licença recomendada: MIT ou CC BY-NC-SA → adicionar LICENSE.md.
+
+Equipe
+Gustavo Castro — RM560831 (coordenação do módulo NLP e README)
+
+Luis Emidio — RM559976 (responsável por scripts e execução)
+
+Matheus Conciani — RM559473 (responsável por dataset e notebooks)
+
+Checklist de Entrega
+ Repositório público no GitHub: fase2-cardioia
+
+ frases.txt com 10 frases bem redigidas
+
+ mapa_conhecimento.csv com ≥15 linhas
+
+ diagnostico.ipynb / diagnostico.py funcionando
+
+ base_risco.csv com ≥40 exemplos (classes balanceadas)
+
+ classificador.ipynb com TF-IDF, modelos, validação e métricas
+
+ requirements.txt e .gitignore
+
+ Vídeo de até 4 minutos (YouTube não listado) + link no README
+
+ Submissão do link na plataforma
+
+Links Úteis / Referências
+Scikit-learn
+
+NLTK
+
+TF-IDF – Scikit-learn Docs
