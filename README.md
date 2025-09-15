@@ -109,38 +109,38 @@ Copy code
    ```bash
    git clone https://github.com/SEU_USUARIO/fase2-cardioia.git
    cd fase2-cardioia
-Criar ambiente virtual
+   ```
 
-bash
-Copy code
-python -m venv .venv
-source .venv/bin/activate   # macOS/Linux
-.venv\Scripts\activate      # Windows
-Instalar dependências
+2. **Criar ambiente virtual**
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate   # macOS/Linux
+   .venv\Scripts\activate      # Windows
+   ```
 
-bash
-Copy code
-pip install -r requirements.txt
-Parte 1 — Executar diagnóstico
+3. **Instalar dependências**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-Notebook: abrir diagnostico.ipynb e rodar.
+4. **Parte 1 — Executar diagnóstico**
+   - Notebook: abrir diagnostico.ipynb e rodar.
+   - Script (se existir diagnostico.py):
+     ```bash
+     python diagnostico.py --input frases.txt --mapa mapa_conhecimento.csv --output resultados_parte1.csv
+     ```
 
-Script (se existir diagnostico.py):
+5. **Parte 2 — Treinar classificador**
+   - Abrir classificador.ipynb no Jupyter e executar.
+   - Modelos são salvos em /modelos e relatórios gerados no notebook.
 
-bash
-Copy code
-python diagnostico.py --input frases.txt --mapa mapa_conhecimento.csv --output resultados_parte1.csv
-Parte 2 — Treinar classificador
+---
 
-Abrir classificador.ipynb no Jupyter e executar.
+## Dependências
 
-Modelos são salvos em /modelos e relatórios gerados no notebook.
+Arquivo `requirements.txt` sugerido:
 
-Dependências
-Arquivo requirements.txt sugerido:
-
-shell
-Copy code
+```shell
 numpy>=1.21
 pandas>=1.3
 scikit-learn>=1.0
@@ -148,67 +148,61 @@ joblib>=1.2
 jupyterlab
 nltk>=3.6
 unidecode>=1.3
+```
+
 Para usar lematização em PT-BR: instalar spacy + pt_core_news_sm.
 
-Métricas de Avaliação e Observações Técnicas
-Métricas usadas
+---
 
-Accuracy
+## Métricas de Avaliação e Observações Técnicas
 
-Precision
+**Métricas usadas**
+- Accuracy
+- Precision
+- Recall
+- F1-score (macro e micro)
+- Matriz de confusão
+- (Opcional) Curva ROC e AUC
 
-Recall
+**Boas práticas**
+- Documentar limitações (dados sintéticos, amostra pequena).
+- Indicar vieses e recomendações (necessidade de validação clínica).
+- Sistema não deve ser usado para diagnóstico real — apenas simulação educacional.
 
-F1-score (macro e micro)
+---
 
-Matriz de confusão
+## Rastreabilidade e Licenças
 
-(Opcional) Curva ROC e AUC
+- Todos os dados são sintéticos e gerados pela equipe.
+- Caso sejam usados materiais externos, incluir fonte e licença no README.
+- Licença recomendada: MIT ou CC BY-NC-SA → adicionar LICENSE.md.
 
-Boas práticas
+---
 
-Documentar limitações (dados sintéticos, amostra pequena).
+## Equipe
 
-Indicar vieses e recomendações (necessidade de validação clínica).
+- Gustavo Castro — RM560831 (coordenação do módulo NLP e README)
+- Luis Emidio — RM559976 (responsável por scripts e execução)
+- Matheus Conciani — RM559473 (responsável por dataset e notebooks)
 
-Sistema não deve ser usado para diagnóstico real — apenas simulação educacional.
+---
 
-Rastreabilidade e Licenças
-Todos os dados são sintéticos e gerados pela equipe.
+## Checklist de Entrega
 
-Caso sejam usados materiais externos, incluir fonte e licença no README.
+- [x] Repositório público no GitHub: fase2-cardioia
+- [x] frases.txt com 10 frases bem redigidas
+- [x] mapa_conhecimento.csv com ≥15 linhas
+- [x] diagnostico.ipynb / diagnostico.py funcionando
+- [x] base_risco.csv com ≥40 exemplos (classes balanceadas)
+- [x] classificador.ipynb com TF-IDF, modelos, validação e métricas
+- [x] requirements.txt e .gitignore
+- [x] Vídeo de até 4 minutos (YouTube não listado) + link no README
+- [x] Submissão do link na plataforma
 
-Licença recomendada: MIT ou CC BY-NC-SA → adicionar LICENSE.md.
+---
 
-Equipe
-Gustavo Castro — RM560831 (coordenação do módulo NLP e README)
+## Links Úteis / Referências
 
-Luis Emidio — RM559976 (responsável por scripts e execução)
-
-Matheus Conciani — RM559473 (responsável por dataset e notebooks)
-
-Checklist de Entrega
- Repositório público no GitHub: fase2-cardioia
-
- frases.txt com 10 frases bem redigidas
-
- mapa_conhecimento.csv com ≥15 linhas
-
- diagnostico.ipynb / diagnostico.py funcionando
-
- base_risco.csv com ≥40 exemplos (classes balanceadas)
-
- classificador.ipynb com TF-IDF, modelos, validação e métricas
-
- requirements.txt e .gitignore
-
- Vídeo de até 4 minutos (YouTube não listado) + link no README
-
- Submissão do link na plataforma
-
-Links Úteis / Referências
-Scikit-learn
-
-NLTK
-
-TF-IDF – Scikit-learn Docs
+- [Scikit-learn](https://scikit-learn.org/)
+- [NLTK](https://www.nltk.org/)
+- [TF-IDF – Scikit-learn Docs](https://scikit-learn.org/stable/modules/feature_extraction.html#text-feature-extraction)
