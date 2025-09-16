@@ -1,0 +1,14 @@
+Symptom1,Symptom2,DiseaseAssociated
+dor no peito,esforço físico,Infarto
+cansaço constante,descansar,Insuficiencia Cardiaca
+falta de ar,subir escadas,Angina
+aperto no tórax,refeições pesadas,Angina
+fadiga extrema,inchaço nas pernas,Insuficiencia Cardiaca
+dificuldade para respirar,noite,Insuficiencia Cardiaca
+dor no peito,braço esquerdo,Infarto
+cansaço,caminhar,Angina
+falta de ar,suor frio,Infarto
+fadiga crônica,tontura,Insuficiencia Cardiaca
+palpitações,coração,Angina
+inchaço,pernas,Insuficiencia Cardiaca
+suor frio,repentina,Infarto
