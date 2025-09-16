@@ -1,66 +1,140 @@
-# CardioIA – Fase 2: Diagnóstico Automatizado – IA no Estetoscópio Digital
+# activity-fiap2-ai-p1a1 <!-- omit in toc -->
 
-## Resumo
-Este repositório contém a implementação da **Fase 2 – Diagnóstico Automatizado** do projeto **CardioIA (FIAP)**.  
-O objetivo é simular um módulo de apoio ao diagnóstico em cardiologia usando **processamento de linguagem natural (NLP)** e **aprendizado de máquina (ML)** aplicado a relatos de sintomas e classificação de risco.
+> Este projeto faz parte do curso de **Inteligência Artificial** da [FIAP](https://github.com/fiap) - Online 2024. Este repositório é a atividade "**Ano 2 - Fase 2** - Cap 1 - Desafio Integrador: IA entre Robôs, Sinapses e Medicina".
 
----
-
-## Índice
+## Índice <!-- omit in toc -->
 - [Visão Geral](#visão-geral)
-- [Objetivos](#objetivos)
+- [Objetivo](#objetivo)
+- [Demonstração](#demonstração)
 - [Parte 1 — Extração de Sintomas e Sugestão de Diagnóstico](#parte-1--extração-de-sintomas-e-sugestão-de-diagnóstico)
+  - [Arquivos Principais](#arquivos-principais)
+  - [Estrutura dos Dados](#estrutura-dos-dados)
+    - [Frases de Sintomas (`sentences.txt`)](#frases-de-sintomas-sentencestxt)
+    - [Mapa de Conhecimento (`symptoms_map.txt`)](#mapa-de-conhecimento-symptoms_maptxt)
+  - [Funcionamento do Sistema](#funcionamento-do-sistema)
+    - [Algoritmo de Correspondência](#algoritmo-de-correspondência)
+  - [Doenças Identificadas](#doenças-identificadas)
+  - [Execução](#execução)
+  - [Limitações e Considerações](#limitações-e-considerações)
 - [Parte 2 — Classificador de Risco (TF-IDF + ML)](#parte-2--classificador-de-risco-tf-idf--ml)
-- [Entregáveis e Estrutura do Repositório](#entregáveis-e-estrutura-do-repositório)
+- [Estrutura do Repositório](#estrutura-do-repositório)
 - [Como Executar (passo a passo)](#como-executar-passo-a-passo)
-- [Dependências](#dependências)
-- [Métricas de Avaliação e Observações Técnicas](#métricas-de-avaliação-e-observações-técnicas)
-- [Rastreabilidade e Licenças](#rastreabilidade-e-licenças)
+  - [Pré-requisitos](#pré-requisitos)
+  - [Instalação](#instalação)
 - [Equipe](#equipe)
-- [Checklist de Entrega](#checklist-de-entrega)
-- [Links Úteis / Referências](#links-úteis--referências)
+  - [Membros](#membros)
+  - [Professores](#professores)
 
 ---
 
 ## Visão Geral
-A Fase 2 foca em duas tarefas obrigatórias:
 
-1. **Parte 1** — Gerar 10 frases simuladas de pacientes, extrair sintomas via `mapa_conhecimento.csv` e sugerir diagnóstico por correspondência de padrões (string matching + regras simples).
-2. **Parte 2** — Treinar um classificador de texto (TF-IDF → ML) que rotule frases em **alto risco** / **baixo risco**.
+O projeto simula um sistema de diagnóstico médico automatizado, utilizando técnicas de extração de informações e classificação de texto para identificar doenças cardiológicas e avaliar riscos com base em sintomas relatados por pacientes.
 
-O objetivo prático é apresentar um **pipeline mínimo, reprodutível e documentado** para demonstrar conceitos de NLP, classificação e governança de dados aplicada ao domínio de saúde.
+## Objetivo
 
----
+Desenvolver um sistema básico que:
+1. Extrai sintomas de frases de pacientes e sugere diagnósticos com base em um mapa de conhecimento (Parte 1).
+2. Classifica frases médicas em "alto risco" ou "baixo risco" usando um modelo de Machine Learning (Parte 2).
 
-## Objetivos
+## Demonstração
 
-**Geral**  
-Implementar e demonstrar um sistema de apoio à triagem clínica baseado em NLP e ML, enfatizando clareza, rastreabilidade e responsabilidade de dados.
+Assista ao vídeo de demonstração (4 minutos) no YouTube: [inserir link do vídeo não listado aqui]. // TODO: Add link
 
-**Específicos**
-- Extrair sintomas a partir de frases em linguagem natural.  
-- Associar sintomas a possíveis diagnósticos via mapa de conhecimento.  
-- Treinar e avaliar um classificador de risco simples usando TF-IDF e Scikit-learn.  
-- Documentar e entregar repositório público com código, dados e vídeo demonstrativo.  
+O vídeo mostra:
+- Execução do script de extração de sintomas com exemplos de diagnósticos.
+- Treinamento e teste do classificador de risco, com análise de acurácia.
+- Reflexões sobre vieses nos dados e governança.
 
 ---
 
 ## Parte 1 — Extração de Sintomas e Sugestão de Diagnóstico
 
-**Arquivos principais**
-- `frases.txt` — 10 frases simuladas (uma frase por linha).  
-- `mapa_conhecimento.csv` — mapa de conhecimento com colunas: `sintoma_1, sintoma_2, doenca_associada`.  
-- `diagnostico.ipynb` / `diagnostico.py` — script/notebook que:
-  - Lê `frases.txt`.  
-  - Carrega `mapa_conhecimento.csv`.  
-  - Normaliza o texto (minúsculas, remoção de pontuação básica).  
-  - Faz pattern matching (frases → sintomas) e sugere diagnóstico.  
-  - Gera `resultados_parte1.csv` com colunas: `frase, sintomas_encontrados, diagnostico_sugerido, confiança_basica`.
+Esta parte implementa um sistema básico de diagnóstico automatizado que analisa frases de sintomas relatados por pacientes e sugere diagnósticos com base em um mapa de conhecimento estruturado.
 
-**Abordagem técnica**
-- Tokenização simples + busca por bigramas/trigramas do mapa.  
-- Regras heurísticas para conflitos (múltiplas doenças → escolher com maior número de sintomas coincidentes).  
-- Notebook contém exemplos e comentários sobre limitações e vieses.  
+### Arquivos Principais
+
+- **`sentences.txt`** — 10 frases completas simulando descrições de sintomas de pacientes
+- **`symptoms_map.txt`** — Mapa de conhecimento em formato CSV relacionando sintomas a doenças
+- **`diagnosis.py`** — Script Python que processa as frases e sugere diagnósticos
+
+### Estrutura dos Dados
+
+#### Frases de Sintomas (`sentences.txt`)
+Contém 10 frases variadas que simulam relatos reais de pacientes, incluindo:
+- Descrição dos sintomas
+- Duração temporal ("Há dois dias", "há uma semana")
+- Contexto de agravamento ("piora quando faço esforço físico")
+- Impacto na rotina ("precisando sentar para melhorar")
+
+**Exemplos:**
+```
+Há dois dias estou com uma dor no peito que piora quando faço esforço físico.
+Sinto cansaço constante há uma semana, mesmo depois de descansar.
+Tenho falta de ar ao subir escadas e palpitações no coração.
+```
+
+#### Mapa de Conhecimento (`symptoms_map.txt`)
+Estrutura CSV com três colunas:
+- **Symptom1** — Primeiro sintoma ou expressão-chave
+- **Symptom2** — Segundo sintoma ou contexto
+- **DiseaseAssociated** — Doença associada
+
+**Exemplos de associações:**
+```csv
+Symptom1,Symptom2,DiseaseAssociated
+dor no peito,esforço físico,Infarto
+cansaço constante,descansar,Insuficiencia Cardiaca
+falta de ar,subir escadas,Angina
+```
+
+### Funcionamento do Sistema
+
+O script `diagnosis.py` implementa a seguinte lógica:
+
+1. **Carregamento dos dados**: Lê o mapa de conhecimento e as frases de sintomas
+2. **Processamento**: Para cada frase, busca correspondências com os sintomas no mapa
+3. **Sugestão de diagnóstico**: Retorna a doença associada ou "Diagnosis not found"
+
+#### Algoritmo de Correspondência
+```python
+def suggest_diagnosis(sentence, knowledge_map):
+    for _, row in knowledge_map.iterrows():
+        symptom1 = row['Symptom1'].lower()
+        symptom2 = row['Symptom2'].lower()
+        if symptom1 in sentence.lower() or symptom2 in sentence.lower():
+            return row['DiseaseAssociated']
+    return "Diagnosis not found"
+```
+
+### Doenças Identificadas
+
+O sistema identifica três principais condições cardiológicas:
+
+- **Infarto** — Associado a dor no peito, esforço físico, braço esquerdo, suor frio
+- **Insuficiência Cardíaca** — Relacionada a cansaço, fadiga, inchaço, dificuldade respiratória noturna
+- **Angina** — Conectada a falta de ar, aperto no tórax, palpitações
+
+### Execução
+
+Siga os passos no [Como Executar (passo a passo)](#como-executar-passo-a-passo) - Parte 1.
+
+**Saída esperada:**
+```
+Patient 1: Há dois dias estou com uma dor no peito que piora quando faço esforço físico.
+Suggested diagnosis: Infarto
+
+Patient 2: Sinto cansaço constante há uma semana, mesmo depois de descansar.
+Suggested diagnosis: Insuficiencia Cardiaca
+...
+```
+
+### Limitações e Considerações
+
+- **Simplicidade**: Sistema básico para fins educacionais
+- **Correspondência exata**: Busca por substring simples, sem processamento de linguagem natural avançado
+- **Dataset limitado**: Apenas 10 frases e 13 associações sintoma-doença
+- **Não substitui diagnóstico médico**: Sistema demonstrativo para aprendizado
 
 ---
 
@@ -82,33 +156,35 @@ Implementar e demonstrar um sistema de apoio à triagem clínica baseado em NLP 
 
 ---
 
-## Entregáveis e Estrutura do Repositório
-/fase2-cardioia
-│── frases.txt
-│── mapa_conhecimento.csv
-│── diagnostico.ipynb
-│── resultados_parte1.csv
-│── base_risco.csv
-│── classificador.ipynb
-│── modelos/
-│ └── tfidf_vectorizer.joblib
-│ └── classifier.joblib
-│── requirements.txt
-│── README.md
-│── .gitignore
-│── video_demo_link.txt (link YouTube não listado)
+## Estrutura do Repositório
 
-yaml
-Copy code
+```bash
+/activity-fiap2-ai-p1a1
+.
+├── .venv
+├── .gitignore
+├── part1
+│   ├── diagnosis.py
+│   ├── sentences.txt
+│   └── symptoms_map.txt
+├── README.md
+└── TODO.md
+```
 
 ---
 
 ## Como Executar (passo a passo)
 
+### Pré-requisitos
+
+- [Python 3.8+](https://www.python.org/downloads/)
+
+### Instalação
+
 1. **Clonar repositório**
    ```bash
-   git clone https://github.com/SEU_USUARIO/fase2-cardioia.git
-   cd fase2-cardioia
+   git clone https://github.com/luisfuturist/activity-fiap2-ai-p1a1
+   cd activity-fiap2-ai-p1a1
    ```
 
 2. **Criar ambiente virtual**
@@ -124,10 +200,9 @@ Copy code
    ```
 
 4. **Parte 1 — Executar diagnóstico**
-   - Notebook: abrir diagnostico.ipynb e rodar.
-   - Script (se existir diagnostico.py):
+   - Script:
      ```bash
-     python diagnostico.py --input frases.txt --mapa mapa_conhecimento.csv --output resultados_parte1.csv
+     python part1/diagnosis.py
      ```
 
 5. **Parte 2 — Treinar classificador**
@@ -136,73 +211,18 @@ Copy code
 
 ---
 
-## Dependências
-
-Arquivo `requirements.txt` sugerido:
-
-```shell
-numpy>=1.21
-pandas>=1.3
-scikit-learn>=1.0
-joblib>=1.2
-jupyterlab
-nltk>=3.6
-unidecode>=1.3
-```
-
-Para usar lematização em PT-BR: instalar spacy + pt_core_news_sm.
-
----
-
-## Métricas de Avaliação e Observações Técnicas
-
-**Métricas usadas**
-- Accuracy
-- Precision
-- Recall
-- F1-score (macro e micro)
-- Matriz de confusão
-- (Opcional) Curva ROC e AUC
-
-**Boas práticas**
-- Documentar limitações (dados sintéticos, amostra pequena).
-- Indicar vieses e recomendações (necessidade de validação clínica).
-- Sistema não deve ser usado para diagnóstico real — apenas simulação educacional.
-
----
-
-## Rastreabilidade e Licenças
-
-- Todos os dados são sintéticos e gerados pela equipe.
-- Caso sejam usados materiais externos, incluir fonte e licença no README.
-- Licença recomendada: MIT ou CC BY-NC-SA → adicionar LICENSE.md.
-
----
-
 ## Equipe
 
-- Gustavo Castro — RM560831 (coordenação do módulo NLP e README)
-- Luis Emidio — RM559976 (responsável por scripts e execução)
-- Matheus Conciani — RM559473 (responsável por dataset e notebooks)
+### Membros
+
+- Gustavo Castro (RM560831)
+- Luis Emidio (RM559976)
+
+### Professores
+
+- **Tutor**: [Leonardo Ruiz Orabona](https://www.linkedin.com/in/leonardoorabona/)  
+- **Coordenador**: [André Godoi](https://www.linkedin.com/in/profandregodoi/)  
 
 ---
 
-## Checklist de Entrega
-
-- [x] Repositório público no GitHub: fase2-cardioia
-- [x] frases.txt com 10 frases bem redigidas
-- [x] mapa_conhecimento.csv com ≥15 linhas
-- [x] diagnostico.ipynb / diagnostico.py funcionando
-- [x] base_risco.csv com ≥40 exemplos (classes balanceadas)
-- [x] classificador.ipynb com TF-IDF, modelos, validação e métricas
-- [x] requirements.txt e .gitignore
-- [x] Vídeo de até 4 minutos (YouTube não listado) + link no README
-- [x] Submissão do link na plataforma
-
----
-
-## Links Úteis / Referências
-
-- [Scikit-learn](https://scikit-learn.org/)
-- [NLTK](https://www.nltk.org/)
-- [TF-IDF – Scikit-learn Docs](https://scikit-learn.org/stable/modules/feature_extraction.html#text-feature-extraction)
+[LICENSE](LICENSE)

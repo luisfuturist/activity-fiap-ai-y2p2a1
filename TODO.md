@@ -6,12 +6,12 @@ Aqui estão os passos:
 
 ### Parte 1 – Frases de Sintomas + Extração de Informações
 
-- [ ] **Criar um arquivo `.txt`** com 10 frases completas que simulem descrições de sintomas de pacientes.
-- [ ] **Criar um arquivo `.csv`** (mapa de conhecimento) que associe sintomas a possíveis doenças (ex: `Sintoma 1 | Sintoma 2 | Doença Associada`).
-- [ ] **Desenvolver um código Python** (`.ipynb` ou `.py`) que:
-    - [ ] Lê as frases do arquivo `.txt`.
-    - [ ] Identifica os sintomas com base no mapa de conhecimento (`.csv`).
-    - [ ] Sugere um possível diagnóstico para cada frase.
+- [x] **Criar um arquivo `.txt`** com 10 frases completas que simulem descrições de sintomas de pacientes.
+- [x] **Criar um arquivo `.csv`** (mapa de conhecimento) que associe sintomas a possíveis doenças (ex: `Sintoma 1 | Sintoma 2 | Doença Associada`).
+- [x] **Desenvolver um código Python** (`.ipynb` ou `.py`) que:
+    - [x] Lê as frases do arquivo `.txt`.
+    - [x] Identifica os sintomas com base no mapa de conhecimento (`.csv`).
+    - [x] Sugere um possível diagnóstico para cada frase.
 
 ### Parte 2 – Classificador Básico de Texto
 
@@ -25,16 +25,16 @@ Aqui estão os passos:
 
 - [x] **Criar um repositório público** no GitHub.
 - [ ] **Adicionar todos os arquivos** das Partes 1 e 2 ao repositório:
-    - [ ] O arquivo `.txt` com as 10 frases.
-    - [ ] O arquivo `.csv` com o mapa de conhecimento.
-    - [ ] O código Python (`.ipynb` ou `.py`) da Parte 1.
+    - [x] O arquivo `.txt` com as 10 frases.
+    - [x] O arquivo `.csv` com o mapa de conhecimento.
+    - [x] O código Python (`.ipynb` ou `.py`) da Parte 1.
     - [ ] O arquivo `.csv` com as frases e rótulos de risco.
     - [ ] O notebook `.ipynb` com o classificador da Parte 2.
 - [ ] **Gravar um vídeo de até 4 minutos** demonstrando o funcionamento completo da solução (Partes 1 e 2).
 - [ ] **Fazer o upload do vídeo** para o YouTube como **"Não Listado"**.
 - [ ] **Criar um arquivo `README.md`** completo no repositório.
 - [ ] **Incluir o link do vídeo** do YouTube no `README.md`.
-- [ ] **Submeter o link do repositório público** na plataforma.
+- [x] **Submeter o link do repositório público** na plataforma.
 
 ---
 
