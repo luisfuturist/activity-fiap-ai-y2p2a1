@@ -140,19 +140,81 @@ Suggested diagnosis: Insuficiencia Cardiaca
 
 ## Parte 2 — Classificador de Risco (TF-IDF + ML)
 
-**Arquivos principais**
-- `base_risco.csv` — dataset sintético no formato: `frase, situacao (alto risco/baixo risco)` (~40–120 exemplos).  
-- `classificador.ipynb` — notebook com:
-  - Pré-processamento (limpeza, stopwords pt-BR, lematização opcional).  
-  - Vetorização TF-IDF.  
-  - Treinamento de **LogisticRegression** e **DecisionTreeClassifier** (comparação).  
-  - Validação: `train_test_split` + métricas de avaliação.  
-  - Salvamento do modelo e vetor (`joblib`).  
+Esta parte implementa um sistema básico de classificação automática que analisa frases de sintomas relatados por pacientes e determina se representam **alto risco** ou **baixo risco**, utilizando técnicas de **Processamento de Linguagem Natural (PLN)** e **aprendizado de máquina**.
 
-**Abordagem técnica**
-- Pipeline do Scikit-learn para encadear TF-IDF + classificador.  
-- Validação: **k-fold cross-validation (k=5)**.  
-- Discussão sobre viés e limitações do dataset sintético.  
+### Arquivos Principais
+
+- **`diagnosticos.csv`** — Base de dados contendo frases médicas simuladas, rotuladas com o nível de risco correspondente.  
+- **`classificador_risco.ipynb`** — Notebook Python que processa os dados, treina o modelo e realiza inferências.
+
+### Estrutura dos Dados
+
+#### Frases de Diagnósticos (`diagnosticos.csv`)
+A base contém frases em português, cada uma rotulada como **alto risco** ou **baixo risco**.  
+
+**Exemplos:**
+- "sinto dor no peito e falta de ar" → **alto risco**  
+- "tive um leve incômodo nas costas" → **baixo risco**  
+- "meu coração está acelerado e sinto tontura" → **alto risco**  
+- "sinto um cansaço leve depois de caminhar" → **baixo risco**
+
+#### Representação dos Dados
+- **Feature (X)** — Texto das frases de sintomas.  
+- **Target (y)** — Classe de risco (`alto risco` ou `baixo risco`).  
+- **Vetor de características** — Criado com **TF-IDF (Term Frequency – Inverse Document Frequency)**, que transforma as frases em vetores numéricos considerando a relevância das palavras no contexto.  
+
+### Funcionamento do Sistema
+
+O notebook `classificador_risco.ipynb` implementa a seguinte lógica:
+
+1. **Carregamento dos dados**: Lê o arquivo `diagnosticos.csv`.  
+2. **Pré-processamento**: Divide os dados em treino (80%) e teste (20%).  
+3. **Vetorização**: Aplica TF-IDF para transformar as frases em representações numéricas.  
+4. **Treinamento**: Utiliza um modelo de **Regressão Logística** para classificação binária.  
+5. **Avaliação**: Mede métricas de acurácia, precisão, recall e F1-score.  
+6. **Persistência**: Salva o classificador e o vetor TF-IDF em arquivos `.pkl` para reuso.  
+7. **Inferência**: Permite classificar novas frases em tempo real.
+
+### Resultados Obtidos
+
+- **Acurácia no conjunto de teste**: 0.75  
+
+**Relatório de Classificação:**
+
+| Classe       | Precision | Recall | F1-score | Support |
+|--------------|-----------|--------|----------|---------|
+| Alto risco   | 0.50      | 1.00   | 0.67     | 1       |
+| Baixo risco  | 1.00      | 0.67   | 0.80     | 3       |
+| **Accuracy** |           |        | **0.75** | 4       |
+| Macro avg    | 0.75      | 0.83   | 0.73     | 4       |
+| Weighted avg | 0.88      | 0.75   | 0.77     | 4       |
+
+### Testes de Inferência
+
+Exemplos de frases testadas no modelo final:
+
+- "sinto uma dor muito forte no peito e estou suando frio" → **alto risco**  
+- "estou com um pouco de tosse e dor de cabeça leve" → **baixo risco**  
+- "minha perna está dormente e não consigo mexer o braço" → **alto risco**  
+- "senti um pequeno desconforto no estômago depois de comer" → **baixo risco**  
+- "febre alta e dificuldade para respirar" → **alto risco**
+
+### Execução
+
+Siga os passos no [Como Executar (passo a passo)](#como-executar-passo-a-passo) - Parte 2.
+
+**Saída esperada:**
+- Treinamento concluído com mensagem de sucesso.  
+- Métricas de desempenho impressas (acurácia e relatório de classificação).  
+- Arquivos `risk_classifier_model.pkl` e `tfidf_vectorizer.pkl` gerados.  
+- Predições corretas para frases de teste, exibindo “alto risco” ou “baixo risco”.  
+
+### Limitações e Considerações
+
+- **Dataset pequeno**: Contém poucas frases, o que limita a generalização.  
+- **Métricas iniciais**: Acurácia de 0.75, satisfatória apenas como protótipo.  
+- **Potencial de melhoria**: Com mais dados reais, técnicas de pré-processamento (remoção de stopwords, lematização) e modelos mais robustos (ex: Random Forest, SVM, redes neurais).  
+- **Finalidade educacional**: O classificador não substitui avaliação médica real; é apenas uma demonstração acadêmica de PLN + ML.
 
 ---
 
@@ -163,13 +225,18 @@ Suggested diagnosis: Insuficiencia Cardiaca
 .
 ├── .venv
 ├── .gitignore
+├── LICENSE
+├── README.md
+├── TODO.md
+├── requirements.txt
 ├── part1
 │   ├── diagnosis.py
 │   ├── sentences.txt
 │   └── symptoms_map.txt
-├── README.md
-└── TODO.md
-```
+└── part2
+    ├── classificador_risco.ipynb
+    └── diagnosticos.csv
+
 
 ---
 
