@@ -24,15 +24,15 @@ Aqui estão os passos:
 ### Entregáveis Finais (Partes 1 e 2)
 
 - [x] **Criar um repositório público** no GitHub.
-- [ ] **Adicionar todos os arquivos** das Partes 1 e 2 ao repositório:
+- [x] **Adicionar todos os arquivos** das Partes 1 e 2 ao repositório:
     - [x] O arquivo `.txt` com as 10 frases.
     - [x] O arquivo `.csv` com o mapa de conhecimento.
     - [x] O código Python (`.ipynb` ou `.py`) da Parte 1.
-    - [ ] O arquivo `.csv` com as frases e rótulos de risco.
-    - [ ] O notebook `.ipynb` com o classificador da Parte 2.
+    - [x] O arquivo `.csv` com as frases e rótulos de risco.
+    - [x] O notebook `.ipynb` com o classificador da Parte 2.
 - [ ] **Gravar um vídeo de até 4 minutos** demonstrando o funcionamento completo da solução (Partes 1 e 2).
 - [ ] **Fazer o upload do vídeo** para o YouTube como **"Não Listado"**.
-- [ ] **Criar um arquivo `README.md`** completo no repositório.
+- [x] **Criar um arquivo `README.md`** completo no repositório.
 - [ ] **Incluir o link do vídeo** do YouTube no `README.md`.
 - [x] **Submeter o link do repositório público** na plataforma.
 
