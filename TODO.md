@@ -15,11 +15,11 @@ Aqui estão os passos:
 
 ### Parte 2 – Classificador Básico de Texto
 
-- [ ] **Montar uma base `.csv`** com frases médicas rotuladas com nível de risco (ex: `frase,situacao` -> `"sinto dor no peito",alto risco`).
-- [ ] **Desenvolver um código em um notebook `.ipynb`** que:
-    - [ ] Aplica o método **TF-IDF** para vetorizar as frases.
-    - [ ] Treina um **modelo de classificação** simples (ex: Decision Tree, Logistic Regression).
-    - [ ] Avalia o desempenho do modelo (ex: acurácia).
+- [x] **Montar uma base `.csv`** com frases médicas rotuladas com nível de risco (ex: `frase,situacao` -> `"sinto dor no peito",alto risco`).
+- [x] **Desenvolver um código em um notebook `.ipynb`** que:
+    - [x] Aplica o método **TF-IDF** para vetorizar as frases.
+    - [x] Treina um **modelo de classificação** simples (ex: Decision Tree, Logistic Regression).
+    - [x] Avalia o desempenho do modelo (ex: acurácia).
 
 ### Entregáveis Finais (Partes 1 e 2)
 
