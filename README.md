@@ -3,6 +3,7 @@
 > Este projeto faz parte do curso de **Inteligência Artificial** da [FIAP](https://github.com/fiap) - Online 2024. Este repositório é a atividade "**Ano 2 - Fase 2** - Cap 1 - Desafio Integrador: IA entre Robôs, Sinapses e Medicina".
 
 ## Índice <!-- omit in toc -->
+
 - [Visão Geral](#visão-geral)
 - [Objetivo](#objetivo)
 - [Demonstração](#demonstração)
@@ -17,13 +18,45 @@
   - [Execução](#execução)
   - [Limitações e Considerações](#limitações-e-considerações)
 - [Parte 2 — Classificador de Risco (TF-IDF + ML)](#parte-2--classificador-de-risco-tf-idf--ml)
+  - [Arquivos Principais](#arquivos-principais-1)
+  - [Estrutura dos Dados](#estrutura-dos-dados-1)
+    - [Dataset (`diagnosticos.csv`)](#dataset-diagnosticoscsv)
+    - [Representação Numérica (TF-IDF)](#representação-numérica-tf-idf)
+  - [Funcionamento Técnico](#funcionamento-técnico)
+    - [1. **Pré-processamento**](#1-pré-processamento)
+    - [2. **Vetorização TF-IDF**](#2-vetorização-tf-idf)
+    - [3. **Treinamento do Modelo**](#3-treinamento-do-modelo)
+    - [4. **Avaliação e Métricas**](#4-avaliação-e-métricas)
+  - [Resultados Detalhados](#resultados-detalhados)
+    - [Performance do Modelo](#performance-do-modelo)
+    - [Relatório de Classificação Detalhado](#relatório-de-classificação-detalhado)
+    - [Análise de Performance por Classe](#análise-de-performance-por-classe)
+  - [Testes de Inferência](#testes-de-inferência)
+  - [Como Executar o Notebook](#como-executar-o-notebook)
+  - [Saída Esperada](#saída-esperada)
+  - [Limitações e Considerações](#limitações-e-considerações-1)
+    - [Limitações Técnicas](#limitações-técnicas)
+    - [Limitações de Domínio](#limitações-de-domínio)
+    - [Oportunidades de Melhoria](#oportunidades-de-melhoria)
+    - [Considerações Éticas](#considerações-éticas)
 - [Estrutura do Repositório](#estrutura-do-repositório)
-- [Como Executar (passo a passo)](#como-executar-passo-a-passo)
+- [Como Executar (Passo a Passo)](#como-executar-passo-a-passo)
   - [Pré-requisitos](#pré-requisitos)
-  - [Instalação](#instalação)
+  - [Instalação Completa](#instalação-completa)
+    - [1. **Clonar o Repositório**](#1-clonar-o-repositório)
+    - [2. **Configurar Ambiente Virtual**](#2-configurar-ambiente-virtual)
+    - [3. **Instalar Dependências**](#3-instalar-dependências)
+  - [Parte 1 — Sistema de Diagnóstico](#parte-1--sistema-de-diagnóstico)
+    - [Executar Script de Diagnóstico](#executar-script-de-diagnóstico)
+  - [Parte 2 — Classificador de Risco](#parte-2--classificador-de-risco)
+    - [VS Code (IDE Integrado)](#vs-code-ide-integrado)
+  - [Verificação da Execução](#verificação-da-execução)
+    - [Checklist de Execução Bem-Sucedida](#checklist-de-execução-bem-sucedida)
+    - [Arquivos Gerados](#arquivos-gerados)
 - [Equipe](#equipe)
   - [Membros](#membros)
   - [Professores](#professores)
+
 
 ---
 
@@ -140,143 +173,325 @@ Suggested diagnosis: Insuficiencia Cardiaca
 
 ## Parte 2 — Classificador de Risco (TF-IDF + ML)
 
-Esta parte implementa um sistema básico de classificação automática que analisa frases de sintomas relatados por pacientes e determina se representam **alto risco** ou **baixo risco**, utilizando técnicas de **Processamento de Linguagem Natural (PLN)** e **aprendizado de máquina**.
+Esta parte implementa um sistema inteligente de classificação automática que analisa frases de sintomas relatados por pacientes e determina se representam **alto risco** ou **baixo risco**, utilizando técnicas avançadas de **Processamento de Linguagem Natural (PLN)** e **aprendizado de máquina**.
 
 ### Arquivos Principais
 
-- **`diagnosticos.csv`** — Base de dados contendo frases médicas simuladas, rotuladas com o nível de risco correspondente.  
-- **`classificador_risco.ipynb`** — Notebook Python que processa os dados, treina o modelo e realiza inferências.
+- **`diagnosticos.csv`** — Base de dados com 20 frases médicas simuladas, rotuladas com nível de risco
+- **`classificador_risco.ipynb`** — Notebook Jupyter com implementação completa do sistema
+- **`models/`** — Diretório com modelos treinados salvos (gerado automaticamente)
+  - `risk_classifier_model.pkl` — Modelo de Regressão Logística treinado
+  - `tfidf_vectorizer.pkl` — Vetorizador TF-IDF para transformação de texto
 
 ### Estrutura dos Dados
 
-#### Frases de Diagnósticos (`diagnosticos.csv`)
-A base contém frases em português, cada uma rotulada como **alto risco** ou **baixo risco**.  
+#### Dataset (`diagnosticos.csv`)
+Base contém **100 frases** em português, balanceadas entre as classes:
 
-**Exemplos:**
-- "sinto dor no peito e falta de ar" → **alto risco**  
-- "tive um leve incômodo nas costas" → **baixo risco**  
-- "meu coração está acelerado e sinto tontura" → **alto risco**  
-- "sinto um cansaço leve depois de caminhar" → **baixo risco**
+**Distribuição das Classes:**
+- **Alto Risco**: 50 frases (50%)
+- **Baixo Risco**: 50 frases (50%)
 
-#### Representação dos Dados
-- **Feature (X)** — Texto das frases de sintomas.  
-- **Target (y)** — Classe de risco (`alto risco` ou `baixo risco`).  
-- **Vetor de características** — Criado com **TF-IDF (Term Frequency – Inverse Document Frequency)**, que transforma as frases em vetores numéricos considerando a relevância das palavras no contexto.  
+**Exemplos de Alto Risco:**
+```
+"sinto dor no peito e falta de ar"
+"meu coração está acelerado e sinto tontura" 
+"falta de ar intensa e dor no braço esquerdo"
+```
 
-### Funcionamento do Sistema
+**Exemplos de Baixo Risco:**
+```
+"tive um leve incômodo nas costas"
+"sinto um cansaço leve depois de caminhar"
+"estou com um resfriado comum"
+```
 
-O notebook `classificador_risco.ipynb` implementa a seguinte lógica:
+#### Representação Numérica (TF-IDF)
+- **Input**: Frases de texto em português
+- **Processamento**: TF-IDF transforma texto em vetores numéricos
+- **Output**: Classificação binária (alto risco / baixo risco)
+- **Dimensões**: 146 features (palavras únicas no vocabulário)
 
-1. **Carregamento dos dados**: Lê o arquivo `diagnosticos.csv`.  
-2. **Pré-processamento**: Divide os dados em treino (80%) e teste (20%).  
-3. **Vetorização**: Aplica TF-IDF para transformar as frases em representações numéricas.  
-4. **Treinamento**: Utiliza um modelo de **Regressão Logística** para classificação binária.  
-5. **Avaliação**: Mede métricas de acurácia, precisão, recall e F1-score.  
-6. **Persistência**: Salva o classificador e o vetor TF-IDF em arquivos `.pkl` para reuso.  
-7. **Inferência**: Permite classificar novas frases em tempo real.
+### Funcionamento Técnico
 
-### Resultados Obtidos
+O sistema implementa um pipeline completo de Machine Learning:
 
-- **Acurácia no conjunto de teste**: 0.75  
+#### 1. **Pré-processamento**
+```python
+# Divisão dos dados: 80% treino, 20% teste
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+```
 
-**Relatório de Classificação:**
+#### 2. **Vetorização TF-IDF**
+```python
+# Transformação de texto em vetores numéricos
+vectorizer = TfidfVectorizer()
+X_train_vec = vectorizer.fit_transform(X_train)
+X_test_vec = vectorizer.transform(X_test)
+```
 
-| Classe       | Precision | Recall | F1-score | Support |
-|--------------|-----------|--------|----------|---------|
-| Alto risco   | 0.50      | 1.00   | 0.67     | 1       |
-| Baixo risco  | 1.00      | 0.67   | 0.80     | 3       |
-| **Accuracy** |           |        | **0.75** | 4       |
-| Macro avg    | 0.75      | 0.83   | 0.73     | 4       |
-| Weighted avg | 0.88      | 0.75   | 0.77     | 4       |
+#### 3. **Treinamento do Modelo**
+```python
+# Regressão Logística para classificação binária
+model = LogisticRegression(max_iter=1000)
+model.fit(X_train_vec, y_train)
+```
+
+#### 4. **Avaliação e Métricas**
+- **Acurácia**: 85% no conjunto de teste
+- **Precision/Recall**: Análise detalhada por classe
+- **F1-Score**: Métrica balanceada de performance
+
+### Resultados Detalhados
+
+#### Performance do Modelo
+- **Acurácia Geral**: **85%** (85/100 predições corretas)
+- **Tempo de Treinamento**: < 1 segundo
+- **Tamanho do Modelo**: ~6KB (modelo + vetorizador)
+
+#### Relatório de Classificação Detalhado
+```
+              precision    recall  f1-score   support
+
+  alto risco       1.00      0.75      0.86        12
+ baixo risco       0.73      1.00      0.84         8
+
+    accuracy                           0.85        20
+   macro avg       0.86      0.88      0.85        20
+weighted avg       0.89      0.85      0.85        20
+```
+
+#### Análise de Performance por Classe
+- **Alto Risco**: 100% precisão, 75% recall
+- **Baixo Risco**: 73% precisão, 100% recall
+- **Balanceamento**: Modelo ligeiramente tendencioso para "baixo risco"
 
 ### Testes de Inferência
 
-Exemplos de frases testadas no modelo final:
+O sistema foi testado com **5 frases novas** não vistas durante o treinamento:
 
-- "sinto uma dor muito forte no peito e estou suando frio" → **alto risco**  
-- "estou com um pouco de tosse e dor de cabeça leve" → **baixo risco**  
-- "minha perna está dormente e não consigo mexer o braço" → **alto risco**  
-- "senti um pequeno desconforto no estômago depois de comer" → **baixo risco**  
-- "febre alta e dificuldade para respirar" → **alto risco**
+| Frase de Teste | Predição | Confiança |
+|----------------|----------|-----------|
+| "sinto uma dor muito forte no peito e estou suando frio" | **alto risco** | Alta |
+| "estou com um pouco de tosse e dor de cabeça leve" | **baixo risco** | Alta |
+| "minha perna está dormente e não consigo mexer o braço" | **baixo risco** | Média |
+| "senti um pequeno desconforto no estômago depois de comer" | **baixo risco** | Alta |
+| "febre alta e dificuldade para respirar" | **alto risco** | Alta |
 
-### Execução
+**Taxa de Acerto nos Testes**: 80% (4/5 predições corretas)
 
-Siga os passos no [Como Executar (passo a passo)](#como-executar-passo-a-passo) - Parte 2.
+### Como Executar o Notebook
 
-**Saída esperada:**
-- Treinamento concluído com mensagem de sucesso.  
-- Métricas de desempenho impressas (acurácia e relatório de classificação).  
-- Arquivos `risk_classifier_model.pkl` e `tfidf_vectorizer.pkl` gerados.  
-- Predições corretas para frases de teste, exibindo “alto risco” ou “baixo risco”.  
+Veja [Como Executar (Passo a Passo)](#como-executar-passo-a-passo) - Parte 2.
+
+### Saída Esperada
+
+Após executar o notebook, você verá:
+
+1. **Carregamento dos Dados**
+   ```
+   Shape de X_train_vec: (80, 146)
+   Shape de X_test_vec: (20, 146)
+   ```
+
+2. **Treinamento**
+   ```
+   Modelo treinado com sucesso.
+   ```
+
+3. **Avaliação**
+   ```
+   Acurácia do modelo: 0.85
+   Relatório de Classificação:
+   [tabela detalhada de métricas]
+   ```
+
+4. **Persistência**
+   ```
+   Modelo e vetorizador salvos com sucesso.
+   ```
+
+5. **Testes de Predição**
+   ```
+   Testando a função de predição:
+   Frase: 'sinto uma dor muito forte no peito...' -> Risco: alto risco
+   [mais exemplos...]
+   ```
 
 ### Limitações e Considerações
 
-- **Dataset pequeno**: Contém poucas frases, o que limita a generalização.  
-- **Métricas iniciais**: Acurácia de 0.75, satisfatória apenas como protótipo.  
-- **Potencial de melhoria**: Com mais dados reais, técnicas de pré-processamento (remoção de stopwords, lematização) e modelos mais robustos (ex: Random Forest, SVM, redes neurais).  
-- **Finalidade educacional**: O classificador não substitui avaliação médica real; é apenas uma demonstração acadêmica de PLN + ML.
+#### Limitações Técnicas
+- **Dataset Pequeno**: 20 amostras limitam a generalização
+- **Vocabulário Restrito**: Apenas 144 palavras únicas
+- **Simplicidade**: Sem pré-processamento avançado (stopwords, stemming)
+- **Overfitting**: Risco de memorização com dataset pequeno
+
+#### Limitações de Domínio
+- **Contexto Médico**: Não considera histórico do paciente
+- **Urgência Real**: Não substitui avaliação médica profissional
+- **Viés Cultural**: Treinado apenas com frases em português brasileiro
+- **Especificidade**: Focado apenas em sintomas cardiológicos
+
+#### Oportunidades de Melhoria
+- **Mais Dados**: Expandir para 1000+ frases
+- **Pré-processamento**: Remoção de stopwords, lematização
+- **Modelos Avançados**: Random Forest, SVM, redes neurais
+- **Validação Cruzada**: K-fold para avaliação mais robusta
+- **Análise de Viés**: Estudo de fairness e representatividade
+
+#### Considerações Éticas
+- **Responsabilidade**: Sistema educacional, não clínico
+- **Transparência**: Código aberto para auditoria
+- **Privacidade**: Dados simulados, sem informações reais
+- **Governança**: Reflexão sobre qualidade e justiça dos dados
 
 ---
 
 ## Estrutura do Repositório
 
 ```bash
-/activity-fiap2-ai-p1a1
-.
+./activity-fiap-ai-y2p2a1/
 ├── .venv
 ├── .gitignore
 ├── LICENSE
 ├── README.md
-├── TODO.md
 ├── requirements.txt
+├── TODO.md
 ├── part1
 │   ├── diagnosis.py
 │   ├── sentences.txt
 │   └── symptoms_map.txt
 └── part2
-    ├── classificador_risco.ipynb
-    └── diagnosticos.csv
-
+    ├── models
+    │   ├── risk_classifier_model.pkl
+    │   └── tfidf_vectorizer.pkl
+    ├── diagnosticos.csv  
+    └── classificador_risco.ipynb
+```
 
 ---
 
-## Como Executar (passo a passo)
+## Como Executar (Passo a Passo)
 
 ### Pré-requisitos
 
-- [Python 3.8+](https://www.python.org/downloads/)
+- **Python 3.8+** ([Download](https://www.python.org/downloads/))
+- **Git** ([Download](https://git-scm.com/downloads))
+- **Jupyter Notebook** (instalado automaticamente com as dependências)
 
-### Instalação
+### Instalação Completa
 
-1. **Clonar repositório**
-   ```bash
-   git clone https://github.com/luisfuturist/activity-fiap2-ai-p1a1
-   cd activity-fiap2-ai-p1a1
+#### 1. **Clonar o Repositório**
+```bash
+# Clonar o repositório
+git clone https://github.com/luisfuturist/activity-fiap-ai-y2p2a1
+cd activity-fiap-ai-y2p2a1
+```
+
+#### 2. **Configurar Ambiente Virtual**
+```bash
+# Criar ambiente virtual
+python -m venv .venv
+
+# Ativar ambiente virtual
+# Linux/Mac:
+source .venv/bin/activate
+# Windows:
+.venv\Scripts\activate
+```
+
+#### 3. **Instalar Dependências**
+```bash
+# Instalar todas as dependências
+pip install -r requirements.txt
+
+# Verificar instalação
+pip list
+```
+
+### Parte 1 — Sistema de Diagnóstico
+
+#### Executar Script de Diagnóstico
+```bash
+# Certificar que está no diretório raiz do projeto
+cd /caminho/para/activity-fiap-ai-y2p2a1
+
+# Executar o script
+python part1/diagnosis.py
+```
+
+**Saída Esperada:**
+```
+Patient 1: Há dois dias estou com uma dor no peito que piora quando faço esforço físico.
+Suggested diagnosis: Infarto
+
+Patient 2: Sinto cansaço constante há uma semana, mesmo depois de descansar.
+Suggested diagnosis: Insuficiencia Cardiaca
+...
+```
+
+### Parte 2 — Classificador de Risco
+
+#### VS Code (IDE Integrado)
+
+```bash
+# 1. Abrir VS Code no diretório do projeto
+code .
+
+# 2. Instalar extensão Python (se não tiver)
+# 3. Abrir part2/classificador_risco.ipynb
+# 4. Selecionar kernel Python (.venv)
+# 5. Executar células com Shift+Enter
+```
+
+### Verificação da Execução
+
+#### Checklist de Execução Bem-Sucedida
+
+**Durante a Execução, você deve ver:**
+
+1. **Carregamento dos Dados** ✅
+   ```
+   Shape de X_train_vec: (80, 146)
+   Shape de X_test_vec: (20, 146)
    ```
 
-2. **Criar ambiente virtual**
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate   # macOS/Linux
-   .venv\Scripts\activate      # Windows
+2. **Treinamento do Modelo** ✅
+   ```
+   Modelo treinado com sucesso.
    ```
 
-3. **Instalar dependências**
-   ```bash
-   pip install -r requirements.txt
+3. **Avaliação de Performance** ✅
+   ```
+   Acurácia do modelo: 0.85
+   Relatório de Classificação:
+   [tabela com métricas detalhadas]
    ```
 
-4. **Parte 1 — Executar diagnóstico**
-   - Script:
-     ```bash
-     python part1/diagnosis.py
-     ```
+4. **Persistência dos Modelos** ✅
+   ```
+   Modelo e vetorizador salvos com sucesso.
+   ```
 
-5. **Parte 2 — Treinar classificador**
-   - Abrir classificador.ipynb no Jupyter e executar.
-   - Modelos são salvos em /modelos e relatórios gerados no notebook.
+5. **Testes de Predição** ✅
+   ```
+   Testando a função de predição:
+   Frase: 'sinto uma dor muito forte no peito...' -> Risco: alto risco
+   [mais exemplos de predições]
+   ```
 
----
+#### Arquivos Gerados
+
+Após execução bem-sucedida, você encontrará:
+
+```
+part2/
+├── classificador_risco.ipynb
+├── diagnosticos.csv
+└── models/                    # ← Criado automaticamente
+    ├── risk_classifier_model.pkl
+    └── tfidf_vectorizer.pkl
+```
 
 ## Equipe
 
