@@ -11,7 +11,7 @@
   - [Arquivos Principais](#arquivos-principais)
   - [Estrutura dos Dados](#estrutura-dos-dados)
     - [Frases de Sintomas (`sentences.txt`)](#frases-de-sintomas-sentencestxt)
-    - [Mapa de Conhecimento (`symptoms_map.txt`)](#mapa-de-conhecimento-symptoms_maptxt)
+    - [Mapa de Conhecimento (`symptoms_map.csv`)](#mapa-de-conhecimento-symptoms_mapcsv)
   - [Funcionamento do Sistema](#funcionamento-do-sistema)
     - [Algoritmo de Correspondência](#algoritmo-de-correspondência)
   - [Doenças Identificadas](#doenças-identificadas)
@@ -88,7 +88,7 @@ Esta parte implementa um sistema básico de diagnóstico automatizado que analis
 ### Arquivos Principais
 
 - **`sentences.txt`** — 10 frases completas simulando descrições de sintomas de pacientes
-- **`symptoms_map.txt`** — Mapa de conhecimento em formato CSV relacionando sintomas a doenças
+- **`symptoms_map.csv`** — Mapa de conhecimento em formato CSV relacionando sintomas a doenças
 - **`diagnosis.py`** — Script Python que processa as frases e sugere diagnósticos
 
 ### Estrutura dos Dados
@@ -107,7 +107,7 @@ Sinto cansaço constante há uma semana, mesmo depois de descansar.
 Tenho falta de ar ao subir escadas e palpitações no coração.
 ```
 
-#### Mapa de Conhecimento (`symptoms_map.txt`)
+#### Mapa de Conhecimento (`symptoms_map.csv`)
 Estrutura CSV com três colunas:
 - **Symptom1** — Primeiro sintoma ou expressão-chave
 - **Symptom2** — Segundo sintoma ou contexto
@@ -360,7 +360,7 @@ Após executar o notebook, você verá:
 ├── part1
 │   ├── diagnosis.py
 │   ├── sentences.txt
-│   └── symptoms_map.txt
+│   └── symptoms_csv.txt
 └── part2
     ├── models
     │   ├── risk_classifier_model.pkl

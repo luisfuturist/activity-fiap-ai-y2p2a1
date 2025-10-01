@@ -5,7 +5,7 @@ import os
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 # Load the knowledge map
-knowledge_map = pd.read_csv('symptoms_map.txt')
+knowledge_map = pd.read_csv('symptoms_map.csv')
 
 # Function to suggest diagnosis based on symptoms in the sentence
 def suggest_diagnosis(sentence, knowledge_map):
