@@ -1,4 +1,4 @@
-# activity-fiap2-ai-p1a1 <!-- omit in toc -->
+# activity-fiap2-ai-p2a1 <!-- omit in toc -->
 
 > Este projeto faz parte do curso de **Inteligência Artificial** da [FIAP](https://github.com/fiap) - Online 2024. Este repositório é a atividade "**Ano 2 - Fase 2** - Cap 1 - Desafio Integrador: IA entre Robôs, Sinapses e Medicina".
 
