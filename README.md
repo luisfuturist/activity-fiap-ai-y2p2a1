@@ -172,7 +172,7 @@ Esta parte implementa um sistema inteligente de classificação automática que 
 
 ### Arquivos Principais
 
-- **`diagnosticos.csv`** — Base de dados com 20 frases médicas simuladas, rotuladas com nível de risco
+- **`diagnosticos.csv`** — Base de dados com 100 frases médicas simuladas, rotuladas com nível de risco
 - **`classificador_risco.ipynb`** — Notebook Jupyter com implementação completa do sistema
 - **`models/`** — Diretório com modelos treinados salvos (gerado automaticamente)
   - `risk_classifier_model.pkl` — Modelo de Regressão Logística treinado
@@ -316,8 +316,8 @@ Após executar o notebook, você verá:
 ### Limitações e Considerações
 
 #### Limitações Técnicas
-- **Dataset Pequeno**: 20 amostras limitam a generalização
-- **Vocabulário Restrito**: Apenas 144 palavras únicas
+- **Dataset Pequeno**: 100 amostras limitam a generalização
+- **Vocabulário Restrito**: Poucas palavras únicas
 - **Simplicidade**: Sem pré-processamento avançado (stopwords, stemming)
 - **Overfitting**: Risco de memorização com dataset pequeno
 
@@ -355,7 +355,7 @@ Após executar o notebook, você verá:
 ├── part1
 │   ├── diagnosis.py
 │   ├── sentences.txt
-│   └── symptoms_csv.txt
+│   └── symptoms_map.csv
 └── part2
     ├── models
     │   ├── risk_classifier_model.pkl
