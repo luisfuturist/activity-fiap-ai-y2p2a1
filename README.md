@@ -72,12 +72,7 @@ Desenvolver um sistema básico que:
 
 ## Demonstração
 
-Assista ao vídeo de demonstração (4 minutos) no YouTube: [inserir link do vídeo não listado aqui]. // TODO: Add link
-
-O vídeo mostra:
-- Execução do script de extração de sintomas com exemplos de diagnósticos.
-- Treinamento e teste do classificador de risco, com análise de acurácia.
-- Reflexões sobre vieses nos dados e governança.
+Assista ao vídeo de demonstração (4 minutos) no YouTube: [Demonstração do Projeto](https://www.youtube.com/watch?v=n9OntvUhb00).
 
 ---
 

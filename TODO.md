@@ -30,10 +30,10 @@ Aqui estão os passos:
     - [x] O código Python (`.ipynb` ou `.py`) da Parte 1.
     - [x] O arquivo `.csv` com as frases e rótulos de risco.
     - [x] O notebook `.ipynb` com o classificador da Parte 2.
-- [ ] **Gravar um vídeo de até 4 minutos** demonstrando o funcionamento completo da solução (Partes 1 e 2).
-- [ ] **Fazer o upload do vídeo** para o YouTube como **"Não Listado"**.
+- [x] **Gravar um vídeo de até 4 minutos** demonstrando o funcionamento completo da solução (Parte 2).
+- [x] **Fazer o upload do vídeo** para o YouTube como **"Não Listado"**.
 - [x] **Criar um arquivo `README.md`** completo no repositório.
-- [ ] **Incluir o link do vídeo** do YouTube no `README.md`.
+- [x] **Incluir o link do vídeo** do YouTube no `README.md`.
 - [x] **Submeter o link do repositório público** na plataforma.
 
 ---
